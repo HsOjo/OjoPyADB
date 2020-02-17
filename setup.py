@@ -1,14 +1,23 @@
 #!/usr/bin/env python
+import setuptools
 
-from distutils.core import setup
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
-setup(name='OjoPyADB',
-      version='0.0.1',
-      description='HsOjo\'s Python3 Android Debug Bridge.',
-      license='MIT',
-      keywords="hsojo android adb",
-      author='HsOjo',
-      author_email='hsojo@qq.com',
-      url='https://github.com/HsOjo/OjoPyADB/',
-      packages=['pyadb'],
-      )
+setuptools.setup(
+    name="OjoPyADB",
+    version="0.0.1",
+    author="HsOjo",
+    author_email="hsojo@qq.com",
+    description="HsOjo\'s Python3 Android Debug Bridge.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/HsOjo/OjoPyADB/",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+)

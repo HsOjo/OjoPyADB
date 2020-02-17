@@ -1,4 +1,4 @@
-import common
+from pyadb import common
 
 
 class ShellLib:
