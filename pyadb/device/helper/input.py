@@ -98,7 +98,7 @@ class KeyCode:
 
 class InputHelper(BaseHelper):
     def input(self, *args, **kwargs):
-        return self.device.exec('input', *args, **kwargs)
+        return self.device.execute('input', *args, **kwargs)
 
     def text(self, content: str):
         [stat, _, _] = self.input('text', content)

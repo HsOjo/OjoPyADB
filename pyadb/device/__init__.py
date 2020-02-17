@@ -9,12 +9,12 @@ class Device:
     def do(self, call):
         return self._adb.do(self, call)
 
-    def exec(self, *args, **kwargs):
+    def execute(self, *args, **kwargs):
         [stat, out, err] = self.do(lambda adb: adb.shell(*args, **kwargs))
         return stat, out, err
 
-    def exec_out(self, *args, **kwargs):
-        [_, out, _] = self.exec(*args, **kwargs)
+    def execute_out(self, *args, **kwargs):
+        [_, out, _] = self.execute(*args, **kwargs)
         return out
 
     @property

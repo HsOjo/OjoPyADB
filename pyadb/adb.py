@@ -22,7 +22,7 @@ class ADB(ShellLib):
 
     @property
     def devices(self):
-        out = self.exec_out('devices')
+        out = self.execute_out('devices')
         devices = {}
         for line in out.splitlines()[1:]:
             device = re.match('(?P<device>.+)\s+(?P<status>.+)', line)
@@ -33,7 +33,7 @@ class ADB(ShellLib):
 
     @property
     def version(self):
-        out = self.exec_out('version')
+        out = self.execute_out('version')
         version = re.match('Android Debug Bridge version (?P<adb_version>.+)\nVersion (?P<sdk_version>.+)', out)
         if version is not None:
             version = version.groupdict()
@@ -60,7 +60,7 @@ class ADB(ShellLib):
             target = '%s:%s' % (host, port)
         else:
             target = host
-        out = self.exec_out('connect', target)
+        out = self.execute_out('connect', target)
         return 'connected' in out
 
     def disconnect(self, host, port=None):
@@ -68,7 +68,7 @@ class ADB(ShellLib):
             target = '%s:%s' % (host, port)
         else:
             target = host
-        out = self.exec_out('disconnect', target)
+        out = self.execute_out('disconnect', target)
         return 'disconnected' in out
 
     def reconnect(self, host, port=None):
@@ -76,11 +76,11 @@ class ADB(ShellLib):
             target = '%s:%s' % (host, port)
         else:
             target = host
-        self.exec('reconnect', target)
+        self.execute('reconnect', target)
 
     def push(self, *local, remote='/sdcard/', sync: bool = False):
         p_args = self._common_args + ['push', *local, remote, '--sync' if sync else None]
-        out = self.exec_out(*p_args)
+        out = self.execute_out(*p_args)
         result = re.findall('(\d+) files pushed', out)
 
         if len(result) == 1:
@@ -91,7 +91,7 @@ class ADB(ShellLib):
 
     def pull(self, *remote, local='./', preserve: bool = True):
         p_args = self._common_args + ['pull', *remote, local, '-a' if preserve else None]
-        out = self.exec_out(*p_args)
+        out = self.execute_out(*p_args)
         result = re.findall('(\d+) files pulled', out)
 
         if len(result) == 1:
@@ -111,45 +111,49 @@ class ADB(ShellLib):
             '-x' if disable_exec_separation else None,
             *command
         ]
-        return self.exec(*p_args, **kwargs)
+        return self.execute(*p_args, **kwargs)
+
+    def exec_out(self, *command, **kwargs):
+        p_args = self._common_args + ['exec-out', *command]
+        return self.execute(*p_args, **kwargs)
 
     def install(self, package: str):
         p_args = self._common_args + ['install', package]
-        return 'success' in self.exec_out(*p_args)
+        return 'Success' in self.execute_out(*p_args)
 
     def uninstall(self, package: str, keep_data=False):
         p_args = self._common_args + [
             'uninstall', package,
             '-k' if keep_data else None
         ]
-        return 'success' in self.exec_out(*p_args)
+        return 'Success' in self.execute_out(*p_args)
 
     def reboot(self, mode: str):
         p_args = self._common_args + ['reboot', mode]
-        self.exec(*p_args)
+        self.execute(*p_args)
 
     def tcpip(self, port: int):
         p_args = self._common_args + ['tcpip', port]
-        self.exec(*p_args)
+        self.execute(*p_args)
 
     def usb(self):
         p_args = self._common_args + ['usb']
-        self.exec(*p_args)
+        self.execute(*p_args)
 
     def start_server(self):
-        self.exec('start-server')
+        self.execute('start-server')
 
     def kill_server(self):
-        self.exec('kill-server')
+        self.execute('kill-server')
 
     def root(self):
         p_args = self._common_args + ['root']
-        self.exec(*p_args)
+        self.execute(*p_args)
 
     def unroot(self):
         p_args = self._common_args + ['unroot']
-        self.exec(*p_args)
+        self.execute(*p_args)
 
     def sideload(self, ota_package: str):
         p_args = self._common_args + ['sideload', ota_package]
-        return self.exec(*p_args)
+        return self.execute(*p_args)
