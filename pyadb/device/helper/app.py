@@ -49,38 +49,21 @@ class AppHelper(BaseHelper):
         out = self.device.execute_out('dumpsys', 'package', package)
         return out
 
-    def get_main_intent(self, package):
-        info = self.info(package)  # type: str
-        activity = []
-        found = False
-        for line in info.splitlines():
-            if found:
-                item = re.match('\s*\S+ (?P<intent>(?P<package>\S+)/(?P<activity>\S+))', line)
-                if item is not None:
-                    activity.append(item.groupdict())
-                else:
-                    break
-            else:
-                if 'android.intent.action.MAIN' in line:
-                    found = True
-
-        if len(activity) > 1:
-            return activity
-        elif len(activity) > 0:
-            return activity[0]
-        else:
-            return None
-
     def am(self, *args, **kwargs):
         return self.device.execute('am', *args, **kwargs)
 
     def start(self, intent):
-        [stat, _, _] = self.am('start', intent)
-        return stat == 0
+        [_, _, err] = self.am('start', intent)
+        return err != ''
+
+    def start_by_package(self, package):
+        [_, _, err] = self.device.do(
+            lambda adb: adb.shell('monkey', '-p', package, '-c', 'android.intent.category.LAUNCHER', '1'))
+        return err != ''
 
     def force_stop(self, package):
-        [stat, _, _] = self.am('force-stop', package)
-        return stat == 0
+        [_, _, err] = self.am('force-stop', package)
+        return err != ''
 
     @property
     def current_activity(self):

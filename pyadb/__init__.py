@@ -36,15 +36,14 @@ if __name__ == '__main__':
     # print(adb.devices)
     # print(adb.version)
     # print(adb.push('/Users/hsojo/Downloads/Python网络爬虫权威指南（第2版）.pdf', remote='/sdcard/test/'))
-
+    adb.current_device = adb.devices[1]
     device = adb.devices[0]
     print(device.file.listdir('/sdcard/'))
     apps = device.app.list()
     print(apps)
-    print(device.app.get_main_activity(apps[0]))
-    print(device.app.get_main_activity(apps[1]))
-    print(device.app.get_main_activity(apps[2]))
-    print(device.app.get_main_activity(apps[3]))
+    for app in apps[:5]:
+        device.app.start_by_package(app)
+        device.app.force_stop(app)
     print(device.app.current_activity)
     # print(adb.last_exec)
     # print(len(device.screen.cap()))
