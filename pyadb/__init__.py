@@ -2,7 +2,7 @@ from pyadb.adb import ADB
 from pyadb.device import Device, KeyCode
 
 
-class PyAdb(ADB):
+class PyADB(ADB):
     @property
     def devices(self):
         devices = []
@@ -29,7 +29,7 @@ class PyAdb(ADB):
 
 
 if __name__ == '__main__':
-    adb = PyAdb()
+    adb = PyADB()
     print(adb.version)
     print(adb.devices)
     if len(adb.devices) > 0:
