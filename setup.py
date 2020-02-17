@@ -9,7 +9,7 @@ setuptools.setup(
     version="0.0.1",
     author="HsOjo",
     author_email="hsojo@qq.com",
-    description="HsOjo\'s Python3 Android Debug Bridge.",
+    description='''HsOjo's Python3 Android Debug Bridge. Support For App/File/Input/Display Management...''',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/HsOjo/OjoPyADB/",
