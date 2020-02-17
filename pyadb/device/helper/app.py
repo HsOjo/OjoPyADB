@@ -24,7 +24,7 @@ class AppHelper(BaseHelper):
             '-e' if enabled_only else None,
             '-d' if disabled_only else None,
         ]
-        [_, out, _] = self.pm(p_args)
+        [_, out, _] = self.pm(*p_args)
         result = re.findall('package:(.*)', out)
         return result
 

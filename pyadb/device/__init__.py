@@ -7,7 +7,7 @@ class Device:
         self.sn = sn
 
     def do(self, call):
-        return self._adb.do(self.sn, call)
+        return self._adb.do(self, call)
 
     def exec(self, *args, **kwargs):
         [stat, out, err] = self.do(lambda adb: adb.shell(*args, **kwargs))

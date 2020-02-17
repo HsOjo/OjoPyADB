@@ -15,9 +15,14 @@ class PyAdb(ADB):
     def current_device(self):
         return Device(self, super().current_device)
 
-    def do(self, device, call):
+    @current_device.setter
+    def current_device(self, value):
+        if isinstance(value, Device):
+            self._current_device = value.sn
+
+    def do(self, device: Device, call):
         _device = self._current_device
-        self._current_device = device
+        self._current_device = device.sn
         result = call(self)
         self._current_device = _device
         return result
@@ -25,6 +30,9 @@ class PyAdb(ADB):
 
 if __name__ == '__main__':
     adb = PyAdb()
+    # adb.kill_server()
+    # adb.start_server()
+
     print(adb.devices)
     print(adb.version)
     print(adb.push('/Users/hsojo/Downloads/Python网络爬虫权威指南（第2版）.pdf', remote='/sdcard/test/'))
@@ -32,4 +40,6 @@ if __name__ == '__main__':
     device = adb.devices[0]
     print(device.file.listdir('/sdcard/'))
     print(device.app.list())
+    print(device.app.info(device.app.list()[2]))
+    print(adb.last_exec)
     print(len(device.screen.cap()))

@@ -5,6 +5,11 @@ from pyadb.utils.shell_lib import ShellLib
 
 
 class ADB(ShellLib):
+    MODE_BOOTLOADER = 'bootloader'
+    MODE_RECOVERY = 'recovery'
+    MODE_SIDELOAD = 'sideload'
+    MODE_SIDELOAD_AUTO_REBOOT = 'sideload-auto-reboot'
+
     def __init__(self, path=None):
         if path is None:
             [_, path, _] = common.execute(['which', 'adb'])
@@ -75,7 +80,7 @@ class ADB(ShellLib):
 
     def push(self, *local, remote='/sdcard/', sync: bool = False):
         p_args = self._common_args + ['push', *local, remote, '--sync' if sync else None]
-        out = self.exec_out(p_args)
+        out = self.exec_out(*p_args)
         result = re.findall('(\d+) files pushed', out)
 
         if len(result) == 1:
@@ -86,7 +91,7 @@ class ADB(ShellLib):
 
     def pull(self, *remote, local='./', preserve: bool = True):
         p_args = self._common_args + ['pull', *remote, local, '-a' if preserve else None]
-        out = self.exec_out(p_args)
+        out = self.exec_out(*p_args)
         result = re.findall('(\d+) files pulled', out)
 
         if len(result) == 1:
@@ -110,23 +115,41 @@ class ADB(ShellLib):
 
     def install(self, package: str):
         p_args = self._common_args + ['install', package]
-        return 'success' in self.exec_out(p_args)
+        return 'success' in self.exec_out(*p_args)
 
     def uninstall(self, package: str, keep_data=False):
         p_args = self._common_args + [
             'uninstall', package,
             '-k' if keep_data else None
         ]
-        return 'success' in self.exec_out(p_args)
+        return 'success' in self.exec_out(*p_args)
 
     def reboot(self, mode: str):
         p_args = self._common_args + ['reboot', mode]
-        self.exec(p_args)
+        self.exec(*p_args)
 
     def tcpip(self, port: int):
         p_args = self._common_args + ['tcpip', port]
-        self.exec(p_args)
+        self.exec(*p_args)
 
     def usb(self):
         p_args = self._common_args + ['usb']
-        self.exec(p_args)
+        self.exec(*p_args)
+
+    def start_server(self):
+        self.exec('start-server')
+
+    def kill_server(self):
+        self.exec('kill-server')
+
+    def root(self):
+        p_args = self._common_args + ['root']
+        self.exec(*p_args)
+
+    def unroot(self):
+        p_args = self._common_args + ['unroot']
+        self.exec(*p_args)
+
+    def sideload(self, ota_package: str):
+        p_args = self._common_args + ['sideload', ota_package]
+        return self.exec(*p_args)
