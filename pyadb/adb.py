@@ -10,6 +10,10 @@ class ADB(ShellLib):
     MODE_SIDELOAD = 'sideload'
     MODE_SIDELOAD_AUTO_REBOOT = 'sideload-auto-reboot'
 
+    STATE_DEVICE = 'device'
+    STATE_BOOTLOADER = 'bootloader'
+    STATE_OFFLINE = 'offline'
+
     def __init__(self, path=None):
         if path is None:
             [_, path, _] = common.execute(['which', 'adb'])
@@ -25,10 +29,10 @@ class ADB(ShellLib):
         out = self.execute_out('devices')
         devices = {}
         for line in out.splitlines()[1:]:
-            device = re.match('(?P<device>.+)\s+(?P<status>.+)', line)
+            device = re.match('(?P<device>.+)\s+(?P<state>.+)', line)
             if device is not None:
                 device = device.groupdict()
-                devices[device['device']] = device['status']
+                devices[device['device']] = device['state']
         return devices
 
     @property
@@ -157,3 +161,6 @@ class ADB(ShellLib):
     def sideload(self, ota_package: str):
         p_args = self._common_args + ['sideload', ota_package]
         return self.execute(*p_args)
+
+    def get_state(self):
+        return self.execute_out('get-state')

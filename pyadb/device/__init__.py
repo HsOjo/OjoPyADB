@@ -18,8 +18,8 @@ class Device:
         return out
 
     @property
-    def status(self):
-        return self._adb.devices[self.sn]
+    def state(self):
+        return self.do(lambda adb: adb.get_state())
 
     @property
     def file(self):

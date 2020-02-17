@@ -30,20 +30,16 @@ class PyAdb(ADB):
 
 if __name__ == '__main__':
     adb = PyAdb()
-    # adb.kill_server()
-    # adb.start_server()
-
-    # print(adb.devices)
-    # print(adb.version)
-    # print(adb.push('/Users/hsojo/Downloads/Python网络爬虫权威指南（第2版）.pdf', remote='/sdcard/test/'))
-    adb.current_device = adb.devices[1]
-    device = adb.devices[0]
-    print(device.file.listdir('/sdcard/'))
-    apps = device.app.list()
-    print(apps)
-    for app in apps[:5]:
-        device.app.start_by_package(app)
-        device.app.force_stop(app)
-    print(device.app.current_activity)
-    # print(adb.last_exec)
-    # print(len(device.screen.cap()))
+    print(adb.version)
+    print(adb.devices)
+    if len(adb.devices) > 0:
+        device = adb.devices[0]
+        print(device.sn, device.state)
+        print(device.app.current_activity)
+        print(device.input.keyevent(KeyCode.HOME))
+        print(device.input.keyevent(KeyCode.SEARCH))
+        print(device.input.text('Hello World!\tThis input method is ASCII only...'))
+        print(device.file.listdir('/sdcard/'))
+        print(device.screen.size())
+        img = device.screen.cap()
+        print(len(img))

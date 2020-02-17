@@ -1,3 +1,5 @@
+import re
+
 from .base import BaseHelper
 
 
@@ -101,17 +103,22 @@ class InputHelper(BaseHelper):
         return self.device.execute('input', *args, **kwargs)
 
     def text(self, content: str):
-        [stat, _, _] = self.input('text', content)
-        return stat == 0
+        content = content.encode().decode('ascii', 'ignore')
+        for i in set(re.findall('\s', content)):
+            content = content.replace(i, '\\' + i)
+        for index, line in enumerate(content.splitlines()):
+            if index > 0:
+                self.keyevent(KeyCode.ENTER)
+            self.input('text', line)
 
-    def keyevent(self, code: int):
-        [stat, _, _] = self.input('keyevent', code)
+    def keyevent(self, code: int, longpress=False):
+        [stat, _, _] = self.input('keyevent', code, '--longpress' if longpress else None)
         return stat == 0
 
     def tap(self, x: int, y: int):
         [stat, _, _] = self.input('tap', x, y)
         return stat == 0
 
-    def swipe(self, sx: int, sy: int, ex: int, ey: int):
-        [stat, _, _] = self.input('swipe', sx, sy, ex, ey)
+    def swipe(self, sx: int, sy: int, ex: int, ey: int, duration: int = None):
+        [stat, _, _] = self.input('swipe', sx, sy, ex, ey, duration)
         return stat == 0
