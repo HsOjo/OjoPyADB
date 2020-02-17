@@ -34,7 +34,7 @@ pip install OjoPyADB-0.0.1-py3-none-any.whl
 pip install https://github.com/HsOjo/OjoPyADB/releases/download/0.0.1/OjoPyADB-0.0.1-py3-none-any.whl
 ```
 
-### Instance code
+### Example code
 
 Here are some simple usage. For specific parameters, please refer to the code prompt of IDE. Try more.
 
