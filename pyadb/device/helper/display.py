@@ -3,8 +3,8 @@ import re
 from .base import BaseHelper
 
 
-class ScreenHelper(BaseHelper):
-    def cap(self, display_id=None) -> bytes:
+class DisplayHelper(BaseHelper):
+    def screen_cap(self, display_id=None) -> bytes:
         p_args = [
             'screencap', '-p',
             ('-d %s' % display_id) if display_id is not None else None,

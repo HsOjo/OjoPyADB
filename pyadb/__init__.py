@@ -40,6 +40,6 @@ if __name__ == '__main__':
         print(device.input.keyevent(KeyCode.SEARCH))
         print(device.input.text('Hello World!\tThis input method is ASCII only...'))
         print(device.file.listdir('/sdcard/'))
-        print(device.screen.size())
-        img = device.screen.cap()
+        print(device.display.size())
+        img = device.display.screen_cap()
         print(len(img))

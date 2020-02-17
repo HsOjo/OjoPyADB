@@ -34,8 +34,8 @@ class Device:
         return InputHelper(self)
 
     @property
-    def screen(self):
-        return ScreenHelper(self)
+    def display(self):
+        return DisplayHelper(self)
 
     def __repr__(self):
         return '<Device %s>' % self.sn
