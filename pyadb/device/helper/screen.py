@@ -1,6 +1,5 @@
 import re
 
-from pyadb import common
 from .base import BaseHelper
 
 

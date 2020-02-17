@@ -1,7 +1,7 @@
 import re
 
 from pyadb import common
-from pyadb.utils.shell_lib import ShellLib
+from pyadb.utils import ShellLib
 
 
 class ADB(ShellLib):

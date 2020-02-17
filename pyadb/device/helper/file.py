@@ -9,7 +9,7 @@ class FileHelper(BaseHelper):
         return self.device.do(lambda adb: adb.push(*args, **kwargs))
 
     def listdir(self, *path):
-        out:str = self.device.execute_out('ls', *path)
+        out: str = self.device.execute_out('ls', *path)
         result = out.splitlines()
         return result
 
