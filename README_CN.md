@@ -1,4 +1,4 @@
-# OjoPyAdb
+# OjoPyADB
 
 该项目使用 Python3 编写，目的在于为 Python3 提供简单、实用的 ADB 功能。
 
@@ -19,6 +19,14 @@
 
 ### 安装
 
+* 从 0.0.3 版本开始，该模块将上传到 pypi，你也可以直接使用 pip 进行安装。
+
+```bash
+pip install OjoPyADB
+```
+
+#### 手动安装
+
 1. 打开[Release 页面](https://github.com/HsOjo/OjoPyADB/releases)，找到最新版本的安装文件。
 
 2. （可选）通过浏览器下载到本机，然后使用 **pip** 执行以下命令，进行安装。
@@ -27,7 +35,7 @@
 pip install OjoPyADB-0.0.1-py3-none-any.whl
 ```
 
-3. 当然，你也可以直接复制安装包的下载链接，使用 **pip** 进行在线安装。（执行以下命令）
+* 当然，你也可以直接复制安装包的下载链接，使用 **pip** 进行在线安装。（执行以下命令）
 
 ```bash
 # 注意，这里的链接为 0.0.1 版本，请自行替换成最新版本。

@@ -6,10 +6,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="OjoPyADB",
-    version="0.0.1",
+    version="0.0.3",
     author="HsOjo",
     author_email="hsojo@qq.com",
-    description='''HsOjo's Python3 Android Debug Bridge. Support For App/File/Input/Display Management...''',
+    keywords='hsojo python3 android adb pyadb ojopyadb',
+    description='''HsOjo's Python3 Android Debug Bridge. Support App/File/Input/Display Operation...''',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/HsOjo/OjoPyADB/",

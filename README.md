@@ -1,4 +1,4 @@
-# OjoPyAdb
+# OjoPyADB
 
 This project is written with Python 3, which aims to provide a simple and practical ADB function for Python 3.
 
@@ -19,15 +19,23 @@ As shown below.
 
 ### Installation
 
+* Starting from version 0.0.3, the module will be uploaded to pypi. You can also install it directly using pip.
+
+```bash
+pip install OjoPyADB
+```
+
+#### Manual Installation
+
 1. Open the [release page](https://github.com/hsojo/ojopyadb/releases) to find the latest version of the installation file.
 
-2. (Optional) download to this machine through browser, and then use **PIP** to execute the following command to install.
+2. (Optional) download to this machine through browser, and then use **pip** to execute the following command to install.
 
 ```bash
 pip install OjoPyADB-0.0.1-py3-none-any.whl
 ```
 
-3. Of course, you can also directly copy the download link of the installation package and use **pip** for online installation. (execute the following command)
+* Of course, you can also directly copy the download link of the installation package and use **pip** for online installation. (execute the following command)
 
 ```bash
 # Note: that the link here is version 0.0.1, please replace it with the latest version.
