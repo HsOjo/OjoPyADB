@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="OjoPyADB",
-    version="0.0.3",
+    version="0.0.4",
     author="HsOjo",
     author_email="hsojo@qq.com",
     keywords='hsojo python3 android adb pyadb ojopyadb',

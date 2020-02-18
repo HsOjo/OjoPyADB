@@ -22,6 +22,10 @@ class Device:
         return self.do(lambda adb: adb.get_state())
 
     @property
+    def abi(self):
+        return self.execute_out('getprop', 'ro.product.cpu.abi')
+
+    @property
     def file(self):
         return FileHelper(self)
 

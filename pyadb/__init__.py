@@ -34,6 +34,7 @@ if __name__ == '__main__':
     print(adb.devices)
     if len(adb.devices) > 0:
         device = adb.devices[0]
+        print(device.abi)
         print(device.sn, device.state)
         print(device.app.current_activity)
         print(device.input.keyevent(KeyCode.HOME))
