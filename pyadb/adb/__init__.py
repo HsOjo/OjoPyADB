@@ -92,8 +92,7 @@ class ADB(ShellLib):
 
     def push(self, *local, remote='/sdcard/', sync: bool = False):
         out = self.device_execute_out('push', *local, remote, '--sync' if sync else None)
-        result = re.findall('(\d+) files pushed', out)
-
+        result = re.findall(r'(\d+) files? pushed', out)
         if len(result) == 1:
             [num] = result
             return int(num) == len(local)
@@ -102,8 +101,7 @@ class ADB(ShellLib):
 
     def pull(self, *remote, local='./', preserve: bool = True):
         out = self.device_execute_out('pull', *remote, local, '-a' if preserve else None)
-        result = re.findall('(\d+) files pulled', out)
-
+        result = re.findall(r'(\d+) files? pulled', out)
         if len(result) == 1:
             [num] = result
             return int(num) == len(local)

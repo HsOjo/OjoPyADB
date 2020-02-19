@@ -2,11 +2,13 @@ from .base import BaseHelper
 
 
 class FileHelper(BaseHelper):
-    def pull(self, *args, **kwargs):
-        return self.device.do(lambda adb: adb.pull(*args, **kwargs))
+    def pull(self, *remote, local='./', preserve: bool = True):
+        params = self.params(locals())
+        return self.device.do(lambda adb: adb.pull(*params.pop('remote'), **params))
 
-    def push(self, *args, **kwargs):
-        return self.device.do(lambda adb: adb.push(*args, **kwargs))
+    def push(self, *local, remote='/sdcard/', sync: bool = False):
+        params = self.params(locals())
+        return self.device.do(lambda adb: adb.push(*params.pop('local'), **params))
 
     def listdir(self, *path):
         out: str = self.device.execute_out('ls', *path)

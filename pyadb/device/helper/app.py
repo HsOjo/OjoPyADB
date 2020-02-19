@@ -22,7 +22,7 @@ class AppHelper(BaseHelper):
             '-d' if disabled_only else None,
         ]
         [_, out, _] = self.pm(*p_args)
-        result = re.findall('package:(.*)', out)
+        result = re.findall(r'package:(.*)', out)
         return result
 
     def enable(self, package):

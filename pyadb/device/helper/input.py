@@ -104,7 +104,7 @@ class InputHelper(BaseHelper):
 
     def text(self, content: str):
         content = content.encode().decode('ascii', 'ignore')
-        for i in set(re.findall('\s', content)):
+        for i in set(re.findall(r'\s', content)):
             content = content.replace(i, '\\' + i)
         for index, line in enumerate(content.splitlines()):
             if index > 0:

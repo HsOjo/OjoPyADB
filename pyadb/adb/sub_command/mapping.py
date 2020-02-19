@@ -56,10 +56,10 @@ class Mapping(BaseSubCommand):
         if current_device_only:
             adb = self.adb
             sn = None
-            if isinstance(adb, pyadb.ADB):
-                sn = adb.current_device
-            elif isinstance(adb, pyadb.PyADB):
+            if isinstance(adb, pyadb.PyADB):
                 sn = adb.current_device.sn
+            elif isinstance(adb, pyadb.ADB):
+                sn = adb.current_device
 
             if sn is not None:
                 for item in self.list.get(sn):
