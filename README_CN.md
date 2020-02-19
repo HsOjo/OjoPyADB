@@ -52,15 +52,20 @@ from pyadb import PyADB, KeyCode
 adb = PyADB()
 print(adb.version)
 print(adb.devices)
+print(adb.forward.list)
 if len(adb.devices) > 0:
-    device = adb.devices[0]
+    device = list(adb.devices.values())[0]
+    print(device.abi)
     print(device.sn, device.state)
     print(device.app.current_activity)
     print(device.input.keyevent(KeyCode.HOME))
     print(device.input.keyevent(KeyCode.SEARCH))
-    print(device.input.text('Hello World!\tThis input method is ASCII only...'))
+    device.input.text('Hello World!\tThis input method is ASCII only...')
     print(device.file.listdir('/sdcard/'))
     print(device.display.size())
     img = device.display.screen_cap()
     print(len(img))
+    logcat = device.logcat
+    logcat.set_filterspecs(**{'ActivityManager': logcat.PRIORITY_INFO})
+    print(logcat.dump())
 ```
