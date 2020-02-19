@@ -6,7 +6,7 @@ from ..adb import Forward, Reverse, Logcat
 class Device:
     def __init__(self, adb: 'pyadb.PyADB', sn):
         self._adb = adb
-        self.sn = sn
+        self._sn = sn
 
     def do(self, call):
         return self._adb.do(self, call)
@@ -18,6 +18,10 @@ class Device:
     def execute_out(self, *args, **kwargs):
         [_, out, _] = self.execute(*args, **kwargs)
         return out
+
+    @property
+    def sn(self):
+        return self._sn
 
     @property
     def adb(self):
@@ -60,4 +64,4 @@ class Device:
         return self.do(lambda adb: adb.logcat)
 
     def __repr__(self):
-        return '<Device %s>' % self.sn
+        return '<Device %s>' % self._sn

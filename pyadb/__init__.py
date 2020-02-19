@@ -7,20 +7,21 @@ class PyADB(ADB):
     def devices(self):
         devices = {}
         for sn, state in super().devices.items():
-            devices[sn] = Device(self, sn)
+            devices[sn] = Device(self.copy(sn), sn)
         return devices
 
     @property
     def current_device(self):
-        return Device(self, super().current_device)
+        sn = super().current_device
+        return Device(self.copy(sn), sn)
 
     def set_current_device(self, device: Device):
         if isinstance(device, Device):
-            self._current_device = device.sn
+            self._current_device = device._sn
 
     def do(self, device: Device, call):
         _device = self._current_device
-        self._current_device = device.sn
+        self._current_device = device._sn
         result = call(self)
         self._current_device = _device
         return result

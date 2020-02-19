@@ -19,7 +19,7 @@ class ADB(ShellLib):
         if path is None:
             [_, path, _] = common.execute(['which', 'adb'])
             if path == '':
-                raise FileNotFoundError("Couldn't find adb.")
+                raise FileNotFoundError("Couldn't find ADB.")
 
         super().__init__(path)
 
@@ -161,9 +161,9 @@ class ADB(ShellLib):
     def get_state(self):
         return self.device_execute_out('get-state')
 
-    def copy(self):
-        obj = self.__class__()
-        obj._current_device = self._current_device
+    def copy(self, device=None):
+        obj = self.__class__(path=self.path)
+        obj._current_device = self._current_device if device is None else device
         return obj
 
     @property
