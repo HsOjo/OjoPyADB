@@ -20,7 +20,7 @@ class DisplayHelper(BaseHelper):
         out: str
         size = {}
         for line in out.splitlines():
-            item = re.match('(?P<key>.*?) size: (?P<width>\d+)x(?P<height>\d+)', line)
+            item = re.match(r'(?P<key>.*?) size: (?P<width>\d+)x(?P<height>\d+)', line)
             if item is not None:
                 size[item['key']] = (int(item['width']), int(item['height']))
 

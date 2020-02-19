@@ -1,8 +1,9 @@
+import pyadb
 from .helper import *
 
 
 class Device:
-    def __init__(self, adb, sn):
+    def __init__(self, adb: 'pyadb.PyADB', sn):
         self._adb = adb
         self.sn = sn
 

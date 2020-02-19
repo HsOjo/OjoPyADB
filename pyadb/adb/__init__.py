@@ -2,6 +2,7 @@ import re
 
 from pyadb import common
 from pyadb.utils import ShellLib
+from .sub_command import *
 
 
 class ADB(ShellLib):
@@ -29,7 +30,7 @@ class ADB(ShellLib):
         out = self.execute_out('devices')
         devices = {}
         for line in out.splitlines()[1:]:
-            device = re.match('(?P<device>.+)\s+(?P<state>.+)', line)
+            device = re.match(r'(?P<device>.+)\s+(?P<state>.+)', line)
             if device is not None:
                 device = device.groupdict()
                 devices[device['device']] = device['state']
@@ -38,13 +39,13 @@ class ADB(ShellLib):
     @property
     def version(self):
         out = self.execute_out('version')
-        version = re.match('Android Debug Bridge version (?P<adb_version>.+)\nVersion (?P<sdk_version>.+)', out)
+        version = re.match(r'Android Debug Bridge version (?P<adb_version>.+)\nVersion (?P<sdk_version>.+)', out)
         if version is not None:
             version = version.groupdict()
         return version
 
     @property
-    def _common_args(self):
+    def _device_args(self):
         args = []
         if self._current_device is not None:
             args += ['-s', self._current_device]
@@ -54,10 +55,17 @@ class ADB(ShellLib):
     def current_device(self):
         return self._current_device
 
-    @current_device.setter
-    def current_device(self, value):
+    def set_current_device(self, value):
         if value in self.devices:
             self._current_device = value
+
+    def device_execute(self, *args, **kwargs):
+        p_args = self._device_args + list(args)
+        return self.execute(*p_args, **kwargs)
+
+    def device_execute_out(self, *args, **kwargs):
+        p_args = self._device_args + list(args)
+        return self.execute_out(*p_args, **kwargs)
 
     def connect(self, host, port=None):
         if port is not None:
@@ -83,8 +91,7 @@ class ADB(ShellLib):
         self.execute('reconnect', target)
 
     def push(self, *local, remote='/sdcard/', sync: bool = False):
-        p_args = self._common_args + ['push', *local, remote, '--sync' if sync else None]
-        out = self.execute_out(*p_args)
+        out = self.device_execute_out('push', *local, remote, '--sync' if sync else None)
         result = re.findall('(\d+) files pushed', out)
 
         if len(result) == 1:
@@ -94,8 +101,7 @@ class ADB(ShellLib):
         return False
 
     def pull(self, *remote, local='./', preserve: bool = True):
-        p_args = self._common_args + ['pull', *remote, local, '-a' if preserve else None]
-        out = self.execute_out(*p_args)
+        out = self.device_execute_out('pull', *remote, local, '-a' if preserve else None)
         result = re.findall('(\d+) files pulled', out)
 
         if len(result) == 1:
@@ -106,61 +112,59 @@ class ADB(ShellLib):
 
     def shell(self, *command, escape: str = None, no_stdin=False, disable_pty_alloc=False, force_pty_alloc=False,
               disable_exec_separation=False, **kwargs):
-        p_args = self._common_args + [
-            'shell',
-            '-e %s' % escape if escape is not None else None,
-            '-n' if no_stdin else None,
-            '-T' if disable_pty_alloc else None,
-            '-t' if force_pty_alloc else None,
-            '-x' if disable_exec_separation else None,
-            *command
-        ]
-        return self.execute(*p_args, **kwargs)
+        return self.device_execute('shell',
+                                   '-e %s' % escape if escape is not None else None,
+                                   '-n' if no_stdin else None,
+                                   '-T' if disable_pty_alloc else None,
+                                   '-t' if force_pty_alloc else None,
+                                   '-x' if disable_exec_separation else None,
+                                   *command, **kwargs)
 
     def exec_out(self, *command, **kwargs):
-        p_args = self._common_args + ['exec-out', *command]
-        return self.execute(*p_args, **kwargs)
+        return self.device_execute('exec-out', *command, **kwargs)
 
     def install(self, package: str):
-        p_args = self._common_args + ['install', package]
-        return 'Success' in self.execute_out(*p_args)
+        return 'Success' in self.device_execute_out(
+            'install', package,
+        )
 
     def uninstall(self, package: str, keep_data=False):
-        p_args = self._common_args + [
+        return 'Success' in self.device_execute_out(
             'uninstall', package,
             '-k' if keep_data else None
-        ]
-        return 'Success' in self.execute_out(*p_args)
+        )
 
     def reboot(self, mode: str):
-        p_args = self._common_args + ['reboot', mode]
-        self.execute(*p_args)
+        return self.device_execute('reboot', mode)
 
     def tcpip(self, port: int):
-        p_args = self._common_args + ['tcpip', port]
-        self.execute(*p_args)
+        return self.device_execute('tcpip', port)
 
     def usb(self):
-        p_args = self._common_args + ['usb']
-        self.execute(*p_args)
+        return self.device_execute('usb')
 
     def start_server(self):
-        self.execute('start-server')
+        return self.execute('start-server')
 
     def kill_server(self):
-        self.execute('kill-server')
+        return self.execute('kill-server')
 
     def root(self):
-        p_args = self._common_args + ['root']
-        self.execute(*p_args)
+        return self.device_execute('root')
 
     def unroot(self):
-        p_args = self._common_args + ['unroot']
-        self.execute(*p_args)
+        return self.device_execute('unroot')
 
     def sideload(self, ota_package: str):
-        p_args = self._common_args + ['sideload', ota_package]
-        return self.execute(*p_args)
+        return self.device_execute('sideload', ota_package)
 
     def get_state(self):
-        return self.execute_out('get-state')
+        return self.device_execute_out('get-state')
+
+    @property
+    def forward(self):
+        return Forward(self)
+
+    @property
+    def reverse(self):
+        return Reverse(self)

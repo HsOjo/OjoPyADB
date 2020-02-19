@@ -69,7 +69,7 @@ class AppHelper(BaseHelper):
     def current_activity(self):
         out = self.device.execute_out('dumpsys activity activities | grep mFocusedActivity')
         item = re.match(
-            '\s+mFocusedActivity: ActivityRecord{\S+ \S+ (?P<intent>(?P<package>\S+)/(?P<activity>\S+)) \S+}', out)
+            r'\s+mFocusedActivity: ActivityRecord{\S+ \S+ (?P<intent>(?P<package>\S+)/(?P<activity>\S+)) \S+}', out)
         if item is not None:
             item = item.groupdict()
         return item
