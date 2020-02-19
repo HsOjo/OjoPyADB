@@ -13,7 +13,10 @@ class ShellLib:
     def execute(self, *args, **kwargs):
         p_args = [arg for arg in args if arg is not None]
         [stat, out, err] = common.execute([self.path, *p_args], **kwargs)
-        self.last_exec = {'status': stat, 'stdout': out, 'stderr': err}
+        self.last_exec = {
+            'args': p_args, 'status': stat, 'stdout': out, 'stderr': err,
+            'exec': ' '.join(str(i) for i in [self.path, *p_args])
+        }
         return stat, out, err
 
     def popen(self, *args, **kwargs):

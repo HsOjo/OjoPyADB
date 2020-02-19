@@ -6,6 +6,10 @@ class BaseSubCommand:
         self._adb = adb
         self._command = command
 
+    @property
+    def adb(self):
+        return self._adb
+
     def execute(self, *args, **kwargs):
         [stat, out, err] = self._adb.device_execute(self._command, *args, **kwargs)
         return stat, out, err

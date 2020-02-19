@@ -161,10 +161,19 @@ class ADB(ShellLib):
     def get_state(self):
         return self.device_execute_out('get-state')
 
+    def copy(self):
+        obj = self.__class__()
+        obj._current_device = self._current_device
+        return obj
+
     @property
     def forward(self):
-        return Forward(self)
+        return Forward(self.copy())
 
     @property
     def reverse(self):
-        return Reverse(self)
+        return Reverse(self.copy())
+
+    @property
+    def logcat(self):
+        return Logcat(self.copy())

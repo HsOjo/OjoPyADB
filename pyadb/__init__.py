@@ -38,7 +38,7 @@ if __name__ == '__main__':
         print(device.app.current_activity)
         print(device.input.keyevent(KeyCode.HOME))
         print(device.input.keyevent(KeyCode.SEARCH))
-        print(device.input.text('Hello World!\tThis input method is ASCII only...'))
+        device.input.text('Hello World!\tThis input method is ASCII only...')
         print(device.file.listdir('/sdcard/'))
         print(device.display.size())
         img = device.display.screen_cap()

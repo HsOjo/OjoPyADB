@@ -46,7 +46,7 @@ class AppHelper(BaseHelper):
         return 'Success' in out
 
     def info(self, package):
-        out = self.device.execute_out('dumpsys', 'package', package)
+        out = self.pm('dump', package)
         return out
 
     def am(self, *args, **kwargs):
@@ -67,9 +67,13 @@ class AppHelper(BaseHelper):
 
     @property
     def current_activity(self):
-        out = self.device.execute_out('dumpsys activity activities | grep mFocusedActivity')
-        item = re.match(
-            r'\s+mFocusedActivity: ActivityRecord{\S+ \S+ (?P<intent>(?P<package>\S+)/(?P<activity>\S+)) \S+}', out)
+        logcat = self.device.do(lambda adb: adb.logcat)
+        logcat.set_filterspecs(**{'ActivityManager': logcat.PRIORITY_INFO})
+        logcat.set_format(logcat.FORMAT_TAG)
+        out = logcat.dump()  # type: str
+        out = out[out.rfind('START'):]
+        out = out[out.find('cmp='):out.find('\n')]
+        item = re.match('cmp=(?P<intent>(?P<package>\S+)/(?P<activity>\S+))', out)
         if item is not None:
             item = item.groupdict()
         return item
