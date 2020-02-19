@@ -20,6 +20,10 @@ class Device:
         return out
 
     @property
+    def adb(self):
+        return self._adb
+
+    @property
     def state(self):
         return self.do(lambda adb: adb.get_state())
 
