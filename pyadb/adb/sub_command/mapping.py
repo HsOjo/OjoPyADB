@@ -47,3 +47,23 @@ class Mapping(BaseSubCommand):
 
     def local_filesystem(self, socket: str):
         return self.bind_execute('localfilesystem:%s' % socket)
+
+    def remove(self, local: str):
+        [_, _, err] = self.execute('--remove', local)
+        return err == ''
+
+    def remove_all(self, current_device_only=True):
+        if current_device_only:
+            adb = self.adb
+            sn = None
+            if isinstance(adb, pyadb.ADB):
+                sn = adb.current_device
+            elif isinstance(adb, pyadb.PyADB):
+                sn = adb.current_device.sn
+
+            if sn is not None:
+                for item in self.list.get(sn):
+                    self.remove(item['local'])
+        else:
+            [_, _, err] = self.execute('--remove-all')
+            return err == ''
