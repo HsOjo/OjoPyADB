@@ -1,5 +1,6 @@
 import pyadb
 from .helper import *
+from ..adb import Forward, Reverse, Logcat
 
 
 class Device:
@@ -41,6 +42,18 @@ class Device:
     @property
     def display(self):
         return DisplayHelper(self)
+
+    @property
+    def forward(self) -> Forward:
+        return self.do(lambda adb: adb.forward)
+
+    @property
+    def reverse(self) -> Reverse:
+        return self.do(lambda adb: adb.reverse)
+
+    @property
+    def logcat(self) -> Logcat:
+        return self.do(lambda adb: adb.logcat)
 
     def __repr__(self):
         return '<Device %s>' % self.sn

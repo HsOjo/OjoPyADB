@@ -7,7 +7,7 @@ from .base import BaseSubCommand
 class Mapping(BaseSubCommand):
     def __init__(self, adb: 'pyadb.ADB', command: str):
         super().__init__(adb, command)
-        self._no_rebind = False
+        self._no_rebind = True
 
     def bind_execute(self, *args, **kwargs):
         if self._no_rebind:

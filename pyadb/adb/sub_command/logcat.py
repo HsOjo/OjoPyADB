@@ -40,7 +40,7 @@ class Logcat(BaseSubCommand):
         if len(self._filterspecs) > 0:
             filterspecs = "%s" % (' '.join(['%s:%s' % (k, v) for k, v in self._filterspecs.items()]))
         args = [
-                   '-d', '-s',
+                   '-d', '-s' if filterspecs is not None else None,
                    '-v %s' % ','.join(self._tags) if self._tags is not None else None
                ] + list(args) + [filterspecs]
         return self.execute_out(*args, **kwargs)

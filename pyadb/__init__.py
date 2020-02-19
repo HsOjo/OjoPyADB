@@ -43,3 +43,6 @@ if __name__ == '__main__':
         print(device.display.size())
         img = device.display.screen_cap()
         print(len(img))
+        logcat = device.logcat
+        logcat.set_filterspecs(**{'ActivityManager': logcat.PRIORITY_INFO})
+        print(logcat.dump())
