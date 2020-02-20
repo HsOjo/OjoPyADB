@@ -66,14 +66,14 @@ class AppHelper(BaseHelper):
         return err != ''
 
     @property
-    def current_activity(self):
+    def last_activity(self):
         logcat = self.device.do(lambda adb: adb.logcat)
         logcat.set_filterspecs(**{'ActivityManager': logcat.PRIORITY_INFO})
         logcat.set_format(logcat.FORMAT_TAG)
         out = logcat.dump()  # type: str
         out = out[out.rfind('START'):]
         out = out[out.find('cmp='):out.find('\n')]
-        item = re.match('cmp=(?P<intent>(?P<package>\S+)/(?P<activity>\S+))', out)
+        item = re.match('cmp=(?P<intent>(?P<package>\S+)/(?P<activity>\S+))}', out)
         if item is not None:
             item = item.groupdict()
         return item
