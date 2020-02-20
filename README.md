@@ -69,3 +69,7 @@ if len(adb.devices) > 0:
     logcat.set_filterspecs(**{'ActivityManager': logcat.PRIORITY_INFO})
     print(logcat.dump())
 ```
+
+### Demo
+
+See the "pyadb/demo" directory.

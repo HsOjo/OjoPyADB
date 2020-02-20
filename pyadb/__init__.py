@@ -12,18 +12,17 @@ class PyADB(ADB):
 
     @property
     def current_device(self):
-        sn = super().current_device
-        return Device(self.copy(sn), sn)
+        return Device(self, self._current_sn)
 
     def set_current_device(self, device: Device):
         if isinstance(device, Device):
-            self._current_device = device._sn
+            self._current_sn = device.sn
 
     def do(self, device: Device, call):
-        _device = self._current_device
-        self._current_device = device._sn
+        sn_old = self._current_sn
+        self._current_sn = device.sn
         result = call(self)
-        self._current_device = _device
+        self._current_sn = sn_old
         return result
 
 

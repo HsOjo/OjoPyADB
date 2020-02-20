@@ -22,8 +22,10 @@ class ADB(ShellLib):
                 raise FileNotFoundError("Couldn't find ADB.")
 
         super().__init__(path)
-
-        self._current_device = None
+        self._current_sn = None
+        self._forward = Forward(self)
+        self._reverse = Reverse(self)
+        self._logcat = Logcat(self)
 
     @property
     def devices(self):
@@ -47,17 +49,17 @@ class ADB(ShellLib):
     @property
     def _device_args(self):
         args = []
-        if self._current_device is not None:
-            args += ['-s', self._current_device]
+        if self._current_sn is not None:
+            args += ['-s', self._current_sn]
         return args
 
     @property
-    def current_device(self):
-        return self._current_device
+    def current_sn(self):
+        return self._current_sn
 
-    def set_current_device(self, value):
-        if value in self.devices:
-            self._current_device = value
+    def set_current_sn(self, sn):
+        if sn in self.devices:
+            self._current_sn = sn
 
     def device_execute(self, *args, **kwargs):
         p_args = self._device_args + list(args)
@@ -159,19 +161,19 @@ class ADB(ShellLib):
     def get_state(self):
         return self.device_execute_out('get-state')
 
-    def copy(self, device=None):
+    def copy(self, sn=None):
         obj = self.__class__(path=self.path)
-        obj._current_device = self._current_device if device is None else device
+        obj._current_sn = self._current_sn if sn is None else sn
         return obj
 
     @property
     def forward(self):
-        return Forward(self.copy())
+        return self._forward
 
     @property
     def reverse(self):
-        return Reverse(self.copy())
+        return self._reverse
 
     @property
     def logcat(self):
-        return Logcat(self.copy())
+        return self._logcat

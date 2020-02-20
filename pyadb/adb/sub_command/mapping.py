@@ -1,4 +1,5 @@
 import re
+from typing import Dict
 
 import pyadb
 from .base import BaseSubCommand
@@ -18,7 +19,7 @@ class Mapping(BaseSubCommand):
     @property
     def list(self):
         out = self.execute_out('--list')  # type: str
-        items = {}
+        items = {}  # type: Dict[str,list]
         for line in out.splitlines():
             item = re.match(
                 r'(?P<device>\S+)\s+(?P<local>(?P<local_type>\S+):(?P<local_value>\S+))\s+(?P<remote_type>\S+):(?P<remote_value>\S+)',
@@ -34,7 +35,12 @@ class Mapping(BaseSubCommand):
                 if items.get(device) is None:
                     items[device] = []
                 items[device].append(item)
-        return items
+
+        sn = self._adb.current_sn
+        if sn is not None:
+            return items[sn]
+        else:
+            return items
 
     def tcp(self, local_port: int, remote_port: int):
         return self.bind_execute('tcp:%s' % local_port, 'tcp:%s' % remote_port)
@@ -54,16 +60,12 @@ class Mapping(BaseSubCommand):
 
     def remove_all(self, current_device_only=True):
         if current_device_only:
-            adb = self.adb
-            sn = None
-            if isinstance(adb, pyadb.PyADB):
-                sn = adb.current_device.sn
-            elif isinstance(adb, pyadb.ADB):
-                sn = adb.current_device
+            items = self.list
+            if isinstance(items, list):
+                b = True
+                for item in items:
+                    b = self.remove(item['local']) and b
+                return b
 
-            if sn is not None:
-                for item in self.list.get(sn):
-                    self.remove(item['local'])
-        else:
-            [_, _, err] = self.execute('--remove-all')
-            return err == ''
+        [_, _, err] = self.execute('--remove-all')
+        return err == ''
