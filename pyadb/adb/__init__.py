@@ -134,10 +134,10 @@ class ADB(ShellLib):
             '-k' if keep_data else None
         )
 
-    def reboot(self, mode: str):
-        return self.device_execute('reboot', mode)
+    def reboot(self, mode: str = ''):
+        return self.device_execute('reboot', mode, timeout=1)
 
-    def tcpip(self, port: int):
+    def tcpip(self, port: int = 5555):
         return self.device_execute('tcpip', port)
 
     def usb(self):
